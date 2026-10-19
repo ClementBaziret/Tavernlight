@@ -1,0 +1,19 @@
+{
+  "$comment": "Structured effects, choices and prerequisites for feats. Categories come from the SRD `type` field.",
+  "alert": { "effects": [{ "type": "initiativeBonus", "value": "prof" }] },
+  "magic-initiate": {
+    "repeatable": true,
+    "choices": [
+      { "id": "list", "kind": "option", "count": 1, "label": "Magic Initiate: spell list", "from": [{ "key": "cleric", "name": "Cleric" }, { "key": "druid", "name": "Druid" }, { "key": "wizard", "name": "Wizard" }] },
+      { "id": "cantrips", "kind": "spells", "count": 2, "spellList": "$option", "level": 0, "label": "Magic Initiate: two cantrips" },
+      { "id": "spell", "kind": "spells", "count": 1, "spellList": "$option", "level": 1, "label": "Magic Initiate: one level 1 spell" }
+    ]
+  },
+  "skilled": { "repeatable": true, "choices": [{ "id": "skills", "kind": "skill", "count": 3, "from": "any", "label": "Skilled: three skills" }] },
+  "grappler": {
+    "prerequisite": { "level": 4 },
+    "choices": [{ "id": "ability", "kind": "ability", "count": 1, "from": ["str", "dex"], "label": "Grappler: +1 Strength or Dexterity" }]
+  },
+  "archery": { "effects": [{ "type": "rangedAttackBonus", "value": 2 }] },
+  "defense": { "effects": [{ "type": "acBonus", "value": 1, "armoredOnly": true }] }
+}

@@ -1,0 +1,10 @@
+**/node_modules
+**/dist
+**/.turbo
+**/.expo
+.env
+**/.env
+*.pdf
+apps/mobile/*
+!apps/mobile/package.json
+.git

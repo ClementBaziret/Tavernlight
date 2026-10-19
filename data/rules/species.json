@@ -1,0 +1,49 @@
+{
+  "$comment": "Structured effects for species traits and lineages. Trait keys are SRD trait indices; lineage keys are SRD subspecies indices.",
+  "species": {
+    "dragonborn": { "lineageLabel": "Draconic Ancestry" },
+    "elf": { "lineageLabel": "Elven Lineage" },
+    "gnome": { "lineageLabel": "Gnomish Lineage" },
+    "goliath": { "lineageLabel": "Giant Ancestry", "speed": 35 },
+    "tiefling": { "lineageLabel": "Fiendish Legacy", "sizes": ["medium", "small"] },
+    "human": { "sizes": ["medium", "small"] }
+  },
+  "traits": {
+    "darkvision-60": { "effects": [{ "type": "sense", "sense": "darkvision", "range": 60 }] },
+    "darkvision-120": { "effects": [{ "type": "sense", "sense": "darkvision", "range": 120 }] },
+    "dwarven-resilience": { "effects": [{ "type": "resistance", "damageType": "poison" }] },
+    "dwarven-toughness": { "effects": [{ "type": "hpPerLevel", "value": 1 }] },
+    "keen-senses": { "choices": [{ "id": "skill", "kind": "skill", "count": 1, "from": ["insight", "perception", "survival"], "label": "Keen Senses: one skill" }] },
+    "skillful": { "choices": [{ "id": "skill", "kind": "skill", "count": 1, "from": "any", "label": "Skillful: one skill" }] },
+    "versatile": { "choices": [{ "id": "feat", "kind": "feat", "count": 1, "from": ["alert", "magic-initiate", "savage-attacker", "skilled"], "label": "Versatile: an Origin feat" }] },
+    "adrenaline-rush": { "effects": [{ "type": "resource", "key": "adrenaline-rush", "name": "Adrenaline Rush", "uses": "prof", "recharge": "short" }] },
+    "relentless-endurance": { "effects": [{ "type": "resource", "key": "relentless-endurance", "name": "Relentless Endurance", "uses": 1, "recharge": "long" }] },
+    "halfling-nimbleness": {},
+    "luck": {},
+    "brave": {},
+    "naturally-stealthy": {},
+    "stonecunning": {},
+    "fey-ancestry": {},
+    "trance": {},
+    "gnomish-cunning": {},
+    "powerful-build": {},
+    "large-form": {},
+    "draconic-flight": {},
+    "otherworldly-presence": {},
+    "resourceful": {}
+  },
+  "lineages": {
+    "elven-lineage-drow": { "effects": [{ "type": "sense", "sense": "darkvision", "range": 120 }], "spells": [{ "level": 1, "spell": "dancing-lights" }, { "level": 3, "spell": "faerie-fire" }, { "level": 5, "spell": "darkness" }] },
+    "elven-lineage-high-elf": { "spells": [{ "level": 1, "spell": "prestidigitation" }, { "level": 3, "spell": "detect-magic" }, { "level": 5, "spell": "misty-step" }] },
+    "elven-lineage-wood-elf": { "effects": [{ "type": "speedBonus", "value": 5 }], "spells": [{ "level": 1, "spell": "druidcraft" }, { "level": 3, "spell": "longstrider" }, { "level": 5, "spell": "pass-without-trace" }] },
+    "gnomish-lineage-forest-gnome": { "spells": [{ "level": 1, "spell": "minor-illusion" }] },
+    "gnomish-lineage-rock-gnome": { "spells": [{ "level": 1, "spell": "mending" }, { "level": 1, "spell": "prestidigitation" }] },
+    "fiendish-legacy-abyssal": { "effects": [{ "type": "resistance", "damageType": "poison" }], "spells": [{ "level": 1, "spell": "poison-spray" }, { "level": 3, "spell": "ray-of-sickness" }, { "level": 5, "spell": "hold-person" }] },
+    "fiendish-legacy-chthonic": { "effects": [{ "type": "resistance", "damageType": "necrotic" }], "spells": [{ "level": 1, "spell": "chill-touch" }, { "level": 3, "spell": "false-life" }, { "level": 5, "spell": "ray-of-enfeeblement" }] },
+    "fiendish-legacy-infernal": { "effects": [{ "type": "resistance", "damageType": "fire" }], "spells": [{ "level": 1, "spell": "fire-bolt" }, { "level": 3, "spell": "hellish-rebuke" }, { "level": 5, "spell": "darkness" }] }
+  },
+  "breathWeapon": {
+    "$comment": "Dragonborn breath weapon generated for each Draconic Ancestry: Constitution-based save, 1d10 damage (2d10 from level 5), uses = proficiency bonus per long rest.",
+    "areas": [{ "shape": "cone", "size": 15 }, { "shape": "line", "size": 30, "width": 5 }]
+  }
+}

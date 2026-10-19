@@ -1,0 +1,188 @@
+{
+  "$comment": "Structured effects and choices for class and subclass features (Tavernlight rules format). Keys are SRD feature indices. `extraFeatures` adds features the dataset doesn't split by level.",
+  "features": {
+    "barbarian-rage": {
+      "effects": [
+        { "type": "resource", "key": "rage", "name": "Rage", "uses": { "classSpecific": "rage_count" }, "recharge": "long" },
+        {
+          "type": "action",
+          "action": {
+            "key": "barbarian-rage",
+            "name": "Rage",
+            "source": "feature",
+            "activation": "bonus",
+            "cost": { "resource": "rage", "amount": 1 },
+            "targeting": { "type": "self" },
+            "resolution": { "type": "auto" },
+            "effects": [
+              {
+                "type": "custom",
+                "name": "Raging",
+                "description": "Resistance to Bludgeoning, Piercing and Slashing damage; extra damage on Strength attacks; advantage on Strength checks and saves.",
+                "duration": { "type": "rounds", "value": 100 }
+              }
+            ],
+            "description": "Enter a rage as a Bonus Action."
+          }
+        }
+      ]
+    },
+    "barbarian-unarmored-defense": { "effects": [{ "type": "acFormula", "base": 10, "abilities": ["dex", "con"], "allowShield": true }] },
+    "barbarian-primal-knowledge": {
+      "choices": [{ "id": "skill", "kind": "skill", "count": 1, "from": ["animal-handling", "athletics", "intimidation", "nature", "perception", "survival"], "label": "Primal Knowledge: one more skill" }]
+    },
+    "barbarian-fast-movement": { "effects": [{ "type": "speedBonus", "value": 10 }] },
+    "bard-bardic-inspiration": {
+      "effects": [{ "type": "resource", "key": "bardic-inspiration", "name": "Bardic Inspiration", "uses": { "ability": "cha" }, "recharge": "long" }]
+    },
+    "bard-expertise": { "choices": [{ "id": "expertise", "kind": "expertise", "count": 2, "label": "Expertise: two skills" }] },
+    "lore-bonus-proficiencies": { "choices": [{ "id": "skills", "kind": "skill", "count": 3, "from": "any", "label": "Bonus Proficiencies: three skills" }] },
+    "cleric-divine-order": {
+      "choices": [
+        {
+          "id": "order",
+          "kind": "option",
+          "count": 1,
+          "label": "Divine Order",
+          "from": [
+            { "key": "protector", "name": "Protector", "description": "Training with Martial weapons and Heavy armor.", "effects": [{ "type": "proficiency", "proficiency": "weapon:martial" }, { "type": "proficiency", "proficiency": "armor:heavy" }] },
+            { "key": "thaumaturge", "name": "Thaumaturge", "description": "One extra cantrip and a bonus to Intelligence (Arcana or Religion) checks." }
+          ]
+        }
+      ]
+    },
+    "cleric-channel-divinity": {
+      "effects": [{ "type": "resource", "key": "channel-divinity", "name": "Channel Divinity", "uses": { "classSpecific": "channel_divinity_charges" }, "recharge": "short" }]
+    },
+    "druid-primal-order": {
+      "choices": [
+        {
+          "id": "order",
+          "kind": "option",
+          "count": 1,
+          "label": "Primal Order",
+          "from": [
+            { "key": "magician", "name": "Magician", "description": "One extra cantrip and a bonus to Intelligence (Arcana or Nature) checks." },
+            { "key": "warden", "name": "Warden", "description": "Training with Martial weapons and Medium armor.", "effects": [{ "type": "proficiency", "proficiency": "weapon:martial" }, { "type": "proficiency", "proficiency": "armor:medium" }] }
+          ]
+        }
+      ]
+    },
+    "druid-wild-shape": {
+      "effects": [{ "type": "resource", "key": "wild-shape", "name": "Wild Shape", "uses": { "classSpecific": "wild_shape_uses" }, "recharge": "long" }]
+    },
+    "fighter-fighting-style": {
+      "choices": [{ "id": "style", "kind": "feat", "count": 1, "from": ["archery", "defense", "great-weapon-fighting", "two-weapon-fighting"], "label": "Fighting Style" }]
+    },
+    "fighter-second-wind": {
+      "effects": [
+        { "type": "resource", "key": "second-wind", "name": "Second Wind", "uses": { "classSpecific": "second_wind_uses" }, "recharge": "short" },
+        {
+          "type": "action",
+          "action": {
+            "key": "fighter-second-wind",
+            "name": "Second Wind",
+            "source": "feature",
+            "activation": "bonus",
+            "cost": { "resource": "second-wind", "amount": 1 },
+            "targeting": { "type": "self" },
+            "resolution": { "type": "auto" },
+            "effects": [{ "type": "heal", "dice": "1d10 + @level" }],
+            "description": "Regain 1d10 + fighter level Hit Points as a Bonus Action."
+          }
+        }
+      ]
+    },
+    "fighter-action-surge": { "effects": [{ "type": "resource", "key": "action-surge", "name": "Action Surge", "uses": 1, "recharge": "short" }] },
+    "monk-unarmored-defense": { "effects": [{ "type": "acFormula", "base": 10, "abilities": ["dex", "wis"], "allowShield": false }] },
+    "monk-monks-focus": { "effects": [{ "type": "resource", "key": "focus", "name": "Focus Points", "uses": { "classSpecific": "focus_points" }, "recharge": "short" }] },
+    "monk-unarmored-movement": { "effects": [{ "type": "speedBonus", "value": 10, "unarmoredOnly": true }] },
+    "paladin-lay-on-hands": { "effects": [{ "type": "resource", "key": "lay-on-hands", "name": "Lay On Hands (HP pool)", "uses": { "classSpecific": "lay_on_hands_pool" }, "recharge": "long" }] },
+    "paladin-fighting-style": {
+      "choices": [{ "id": "style", "kind": "feat", "count": 1, "from": ["archery", "defense", "great-weapon-fighting", "two-weapon-fighting"], "label": "Fighting Style" }]
+    },
+    "paladin-channel-divinity": {
+      "effects": [{ "type": "resource", "key": "channel-divinity", "name": "Channel Divinity", "uses": { "classSpecific": "channel_divinity_charges" }, "recharge": "short" }]
+    },
+    "ranger-deft-explorer": { "choices": [{ "id": "expertise", "kind": "expertise", "count": 1, "label": "Deft Explorer: expertise in one skill" }] },
+    "ranger-fighting-style": {
+      "choices": [{ "id": "style", "kind": "feat", "count": 1, "from": ["archery", "defense", "great-weapon-fighting", "two-weapon-fighting"], "label": "Fighting Style" }]
+    },
+    "hunter-hunters-prey": {
+      "choices": [
+        {
+          "id": "prey",
+          "kind": "option",
+          "count": 1,
+          "label": "Hunter's Prey",
+          "from": [
+            { "key": "colossus-slayer", "name": "Colossus Slayer", "description": "Once per turn, 1d8 extra damage to a creature that is missing Hit Points." },
+            { "key": "horde-breaker", "name": "Horde Breaker", "description": "Once per turn, an extra attack against another creature near the first target." }
+          ]
+        }
+      ]
+    },
+    "rogue-expertise": { "choices": [{ "id": "expertise", "kind": "expertise", "count": 2, "label": "Expertise: two skills" }] },
+    "sorcerer-font-of-magic": { "effects": [{ "type": "resource", "key": "sorcery-points", "name": "Sorcery Points", "uses": { "classSpecific": "sorcery_points" }, "recharge": "long" }] },
+    "draconic-sorcery-draconic-resilience": {
+      "effects": [
+        { "type": "hpPerLevel", "value": 1 },
+        { "type": "acFormula", "base": 10, "abilities": ["dex", "cha"], "allowShield": true }
+      ]
+    },
+    "wizard-arcane-recovery": { "effects": [{ "type": "resource", "key": "arcane-recovery", "name": "Arcane Recovery", "uses": 1, "recharge": "long" }] },
+    "warlock-eldritch-invocations": {
+      "choices": [{ "id": "invocations", "kind": "option", "count": 1, "label": "Eldritch Invocation", "from": "$invocations" }]
+    }
+  },
+  "extraFeatures": {
+    "warlock": [
+      {
+        "key": "warlock-eldritch-invocations-2",
+        "name": "Eldritch Invocations (2 more)",
+        "level": 2,
+        "description": "You learn two more Eldritch Invocations.",
+        "choices": [{ "id": "invocations", "kind": "option", "count": 2, "label": "Eldritch Invocations", "from": "$invocations" }]
+      },
+      {
+        "key": "warlock-eldritch-invocations-5",
+        "name": "Eldritch Invocations (2 more)",
+        "level": 5,
+        "description": "You learn two more Eldritch Invocations.",
+        "choices": [{ "id": "invocations", "kind": "option", "count": 2, "label": "Eldritch Invocations", "from": "$invocations" }]
+      }
+    ]
+  },
+  "invocations": [
+    { "key": "agonizing-blast", "name": "Agonizing Blast", "description": "Add your Charisma modifier to the damage of a chosen damage cantrip." },
+    { "key": "armor-of-shadows", "name": "Armor of Shadows", "description": "Cast Mage Armor on yourself at will: base AC 13 + Dexterity modifier.", "effects": [{ "type": "acFormula", "base": 13, "abilities": ["dex"], "allowShield": true }] },
+    { "key": "devils-sight", "name": "Devil's Sight", "description": "See normally in darkness, magical or not, within 120 feet.", "effects": [{ "type": "sense", "sense": "darkvision", "range": 120 }] },
+    { "key": "eldritch-mind", "name": "Eldritch Mind", "description": "Advantage on Constitution saves made to keep Concentration." },
+    { "key": "pact-of-the-blade", "name": "Pact of the Blade", "description": "Conjure a pact weapon and use Charisma for its attack and damage rolls." },
+    { "key": "pact-of-the-chain", "name": "Pact of the Chain", "description": "Learn Find Familiar and summon a special familiar." },
+    { "key": "pact-of-the-tome", "name": "Pact of the Tome", "description": "A Book of Shadows grants three extra cantrips and two ritual spells." },
+    { "key": "repelling-blast", "name": "Repelling Blast", "description": "Push a creature hit by a chosen damage cantrip up to 10 feet away." }
+  ],
+  "classSpecific": {
+    "$comment": "Values computed from the class level: Lay On Hands pool = 5 x paladin level.",
+    "paladin": { "lay_on_hands_pool": { "perLevel": 5 } }
+  },
+  "subclassSpells": {
+    "life-domain": [
+      { "level": 3, "spell": "aid" }, { "level": 3, "spell": "bless" }, { "level": 3, "spell": "cure-wounds" }, { "level": 3, "spell": "lesser-restoration" },
+      { "level": 5, "spell": "mass-healing-word" }, { "level": 5, "spell": "revivify" }
+    ],
+    "oath-of-devotion": [
+      { "level": 3, "spell": "protection-from-evil-and-good" }, { "level": 3, "spell": "shield-of-faith" },
+      { "level": 5, "spell": "aid" }, { "level": 5, "spell": "zone-of-truth" }
+    ],
+    "draconic-sorcery": [
+      { "level": 3, "spell": "alter-self" }, { "level": 3, "spell": "chromatic-orb" }, { "level": 3, "spell": "command" }, { "level": 3, "spell": "dragons-breath" },
+      { "level": 5, "spell": "fear" }, { "level": 5, "spell": "fly" }
+    ],
+    "fiend-patron": [
+      { "level": 3, "spell": "burning-hands" }, { "level": 3, "spell": "command" }, { "level": 3, "spell": "scorching-ray" }, { "level": 3, "spell": "suggestion" },
+      { "level": 5, "spell": "fireball" }, { "level": 5, "spell": "stinking-cloud" }
+    ]
+  }
+}

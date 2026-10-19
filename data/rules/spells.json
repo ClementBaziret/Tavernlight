@@ -1,0 +1,136 @@
+{
+  "$comment": "Hand-written structured actions for spells whose text the importer can't turn into effects reliably. `key`, `name`, `source`, `level`, `concentration` and `description` are filled in by the importer.",
+  "magic-missile": {
+    "range": { "normal": 120 },
+    "targeting": { "type": "multiple", "count": 3 },
+    "resolution": { "type": "auto" },
+    "effects": [{ "type": "damage", "dice": "1d4 + 1", "damageType": "force" }],
+    "upcast": { "targets": 1 }
+  },
+  "bless": {
+    "range": { "normal": 30 },
+    "targeting": { "type": "multiple", "count": 3 },
+    "resolution": { "type": "auto" },
+    "effects": [
+      { "type": "modifier", "target": "attack", "value": "1d4", "name": "Bless (attacks)" },
+      { "type": "modifier", "target": "save", "value": "1d4", "name": "Bless (saves)" }
+    ],
+    "duration": { "type": "rounds", "value": 10 },
+    "upcast": { "targets": 1 }
+  },
+  "shield": {
+    "activation": "reaction",
+    "range": { "self": true },
+    "targeting": { "type": "self" },
+    "resolution": { "type": "auto" },
+    "effects": [{ "type": "modifier", "target": "ac", "value": 5, "name": "Shield", "duration": { "type": "rounds", "value": 1 } }]
+  },
+  "shield-of-faith": {
+    "activation": "bonus",
+    "range": { "normal": 60 },
+    "targeting": { "type": "single" },
+    "resolution": { "type": "auto" },
+    "effects": [{ "type": "modifier", "target": "ac", "value": 2, "name": "Shield of Faith" }],
+    "duration": { "type": "rounds", "value": 100 }
+  },
+  "cure-wounds": {
+    "range": { "touch": true },
+    "targeting": { "type": "single" },
+    "resolution": { "type": "auto" },
+    "effects": [{ "type": "heal", "dice": "2d8 + @spell_mod" }],
+    "upcast": { "heal": "2d8" }
+  },
+  "healing-word": {
+    "activation": "bonus",
+    "range": { "normal": 60 },
+    "targeting": { "type": "single" },
+    "resolution": { "type": "auto" },
+    "effects": [{ "type": "heal", "dice": "2d4 + @spell_mod" }],
+    "upcast": { "heal": "2d4" }
+  },
+  "mass-healing-word": {
+    "activation": "bonus",
+    "range": { "normal": 60 },
+    "targeting": { "type": "multiple", "count": 6 },
+    "resolution": { "type": "auto" },
+    "effects": [{ "type": "heal", "dice": "2d4 + @spell_mod" }],
+    "upcast": { "heal": "1d4" }
+  },
+  "false-life": {
+    "range": { "self": true },
+    "targeting": { "type": "self" },
+    "resolution": { "type": "auto" },
+    "effects": [{ "type": "tempHp", "dice": "2d4 + 4" }],
+    "upcast": { "heal": "5" }
+  },
+  "hold-person": {
+    "range": { "normal": 60 },
+    "targeting": { "type": "single" },
+    "resolution": { "type": "save", "ability": "wis", "dc": "@spell_dc" },
+    "onFail": [{ "type": "condition", "condition": "paralyzed", "repeatSave": true }],
+    "duration": { "type": "rounds", "value": 10 },
+    "upcast": { "targets": 1 }
+  },
+  "scorching-ray": {
+    "range": { "normal": 120 },
+    "targeting": { "type": "multiple", "count": 3 },
+    "resolution": { "type": "attack", "bonus": "@spell_attack", "kind": "ranged" },
+    "onHit": [{ "type": "damage", "dice": "2d6", "damageType": "fire" }],
+    "upcast": { "targets": 1 }
+  },
+  "hunters-mark": {
+    "activation": "bonus",
+    "range": { "normal": 90 },
+    "targeting": { "type": "single" },
+    "resolution": { "type": "auto" },
+    "effects": [{ "type": "custom", "name": "Hunter's Mark", "description": "The caster deals an extra 1d6 Force damage when hitting this creature with an attack." }],
+    "duration": { "type": "rounds", "value": 600 }
+  },
+  "sacred-flame": {
+    "range": { "normal": 60 },
+    "targeting": { "type": "single" },
+    "resolution": { "type": "save", "ability": "dex", "dc": "@spell_dc" },
+    "onFail": [{ "type": "damage", "dice": "1d8", "damageType": "radiant" }],
+    "cantripScaling": true
+  },
+  "guiding-bolt": {
+    "range": { "normal": 120 },
+    "targeting": { "type": "single" },
+    "resolution": { "type": "attack", "bonus": "@spell_attack", "kind": "ranged" },
+    "onHit": [
+      { "type": "damage", "dice": "4d6", "damageType": "radiant" },
+      { "type": "custom", "name": "Guiding Bolt", "description": "The next attack roll against this creature before the end of the caster's next turn has Advantage.", "duration": { "type": "rounds", "value": 1 } }
+    ],
+    "upcast": { "damage": "1d6" }
+  },
+  "faerie-fire": {
+    "range": { "normal": 60 },
+    "targeting": { "type": "area", "area": { "shape": "cube", "size": 20 } },
+    "resolution": { "type": "save", "ability": "dex", "dc": "@spell_dc" },
+    "onFail": [{ "type": "custom", "name": "Faerie Fire", "description": "Outlined in light: attack rolls against it have Advantage and it can't benefit from being Invisible." }],
+    "duration": { "type": "rounds", "value": 10 }
+  },
+  "aid": {
+    "range": { "normal": 30 },
+    "targeting": { "type": "multiple", "count": 3 },
+    "resolution": { "type": "auto" },
+    "effects": [
+      { "type": "heal", "dice": "5" },
+      { "type": "custom", "name": "Aid", "description": "Hit Point maximum and current Hit Points increased by 5 for 8 hours." }
+    ],
+    "upcast": { "heal": "5" }
+  },
+  "mage-armor": {
+    "range": { "touch": true },
+    "targeting": { "type": "single" },
+    "resolution": { "type": "auto" },
+    "effects": [{ "type": "custom", "name": "Mage Armor", "description": "Base AC becomes 13 + Dexterity modifier while not wearing armor." }]
+  },
+  "eldritch-blast": {
+    "range": { "normal": 120 },
+    "targeting": { "type": "single" },
+    "resolution": { "type": "attack", "bonus": "@spell_attack", "kind": "ranged" },
+    "onHit": [{ "type": "damage", "dice": "1d10", "damageType": "force" }],
+    "description": "One beam; cast it again for each extra beam (2 beams at level 5)."
+  }
+}

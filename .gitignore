@@ -1,0 +1,19 @@
+node_modules/
+dist/
+build/
+.turbo/
+coverage/
+*.log
+.env
+.env.local
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+# Expo
+apps/mobile/.expo/
+apps/mobile/android/
+apps/mobile/ios/
+# Server uploads in dev
+apps/server/uploads/

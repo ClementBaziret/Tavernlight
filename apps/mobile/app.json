@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "Tavernlight",
+    "slug": "tavernlight",
+    "scheme": "tavernlight",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "platforms": ["android"],
+    "android": {
+      "package": "com.tavernlight.app",
+      "backgroundColor": "#1b2140"
+    },
+    "plugins": ["expo-router", "expo-secure-store"],
+    "experiments": { "typedRoutes": false }
+  }
+}

@@ -1,0 +1,44 @@
+# Tavernlight — one command to run everything:
+#   docker compose up --build
+# then open http://localhost:3000 (demo accounts: see README).
+#
+# For development, start only the database: `docker compose up -d db`.
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: tavernlight
+      POSTGRES_PASSWORD: tavernlight
+      POSTGRES_DB: tavernlight
+    ports:
+      # 5433 on the host, so it never collides with a locally installed PostgreSQL.
+      - "5433:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tavernlight -d tavernlight"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://tavernlight:tavernlight@db:5432/tavernlight?schema=public
+      PORT: "3000"
+      COOKIE_SECURE: "false"
+      DEMO_PASSWORD: ${DEMO_PASSWORD:-tavernlight}
+      # Imports the SRD and loads the demo campaign on startup (both are idempotent).
+      BOOTSTRAP: "true"
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+volumes:
+  db-data:

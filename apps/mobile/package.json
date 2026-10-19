@@ -1,0 +1,31 @@
+{
+  "name": "@tavernlight/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "description": "Tavernlight mobile app (Android, React Native + Expo): character builder, sheet and dice.",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.104.4",
+    "@tavernlight/dice": "workspace:*",
+    "@tavernlight/engine": "workspace:*",
+    "@tavernlight/shared": "workspace:*",
+    "expo": "~58.0.16",
+    "expo-constants": "~58.0.12",
+    "expo-router": "~58.0.24",
+    "expo-secure-store": "~58.0.2",
+    "expo-status-bar": "~58.0.3",
+    "react": "19.3.0",
+    "react-native": "0.88.0",
+    "react-native-safe-area-context": "~5.10.1",
+    "react-native-screens": "~4.30.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "typescript": "~5.9.3"
+  }
+}

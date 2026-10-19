@@ -1,0 +1,5 @@
+{
+  "$comment": "Background details missing from the SRD dataset: the spell list of the Magic Initiate origin feat.",
+  "acolyte": { "featOption": "cleric" },
+  "sage": { "featOption": "wizard" }
+}

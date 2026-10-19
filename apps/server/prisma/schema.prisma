@@ -1,0 +1,259 @@
+// Tavernlight data model. Rules content (SRD) lives in RuleSet / RuleEntity;
+// game data (campaigns, characters, maps...) references rules by key.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  displayName  String
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  sessions    AuthSession[]
+  memberships CampaignMember[]
+  characters  Character[]
+  rolls       DiceRoll[]
+  assets      Asset[]
+}
+
+/// Login sessions. Only a SHA-256 hash of the token is stored.
+model AuthSession {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAgent String?
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([userId])
+}
+
+/// One import of the rules (source dataset version + importer format version).
+model RuleSet {
+  id            String   @id @default(cuid())
+  source        String
+  sourceVersion String
+  formatVersion Int
+  checksum      String
+  attribution   String
+  active        Boolean  @default(false)
+  importedAt    DateTime @default(now())
+
+  entities RuleEntity[]
+
+  @@unique([sourceVersion, formatVersion, checksum])
+}
+
+/// A rules entry (spell, monster, class...) in the Tavernlight rules format.
+model RuleEntity {
+  id        String  @id @default(cuid())
+  ruleSetId String
+  ruleSet   RuleSet @relation(fields: [ruleSetId], references: [id], onDelete: Cascade)
+  /// species | backgrounds | classes | subclasses | feats | spells | items | magicItems | monsters | skills | conditions | damageTypes | encounters
+  kind      String
+  key       String
+  name      String
+  data      Json
+  // Columns used by searches and filters.
+  level        Int?
+  cr           Float?
+  creatureType String?
+  size         String?
+
+  @@unique([ruleSetId, kind, key])
+  @@index([ruleSetId, kind, name])
+}
+
+model Campaign {
+  id          String   @id @default(cuid())
+  name        String
+  description String   @default("")
+  inviteCode  String   @unique
+  activeMapId String?
+  revealedDocumentId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members    CampaignMember[]
+  characters Character[]
+  maps       GameMap[]
+  encounters Encounter[]
+  combats    Combat[]
+  notes      Note[]
+  documents  CampaignDocument[]
+  rolls      DiceRoll[]
+  logEntries LogEntry[]
+}
+
+model CampaignMember {
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// gm | player
+  role       String
+  joinedAt   DateTime @default(now())
+
+  @@id([campaignId, userId])
+  @@index([userId])
+}
+
+model Character {
+  id         String    @id @default(cuid())
+  ownerId    String
+  owner      User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  campaignId String?
+  campaign   Campaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  name       String
+  /// CharacterBuild: every choice (species, class, scores, spells, level history).
+  build      Json
+  /// CharacterState: hit points, slots, inventory, money, notes.
+  state      Json
+  /// CharacterDetails: appearance, backstory, portrait.
+  details    Json
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  rolls DiceRoll[]
+
+  @@index([ownerId])
+  @@index([campaignId])
+}
+
+model GameMap {
+  id          String   @id @default(cuid())
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  name        String
+  description String   @default("")
+  gridType    String
+  cols        Int
+  rows        Int
+  /// MapData: grid, terrain, decor, walls, tokens and fog (the layers).
+  data        Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([campaignId])
+}
+
+model Encounter {
+  id          String   @id @default(cuid())
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  name        String
+  description String   @default("")
+  mapId       String?
+  /// [{ key, count }]
+  monsters    Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([campaignId])
+}
+
+model Combat {
+  id         String   @id @default(cuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  mapId      String?
+  active     Boolean  @default(true)
+  /// CombatState: round, turn, order and combatants.
+  state      Json
+  /// Proposals waiting for the game master.
+  pending    Json     @default("[]")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([campaignId, active])
+}
+
+/// Game log: every applied result, with the operations needed to undo it.
+model LogEntry {
+  id         String   @id @default(cuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  combatId   String?
+  seq        Int
+  kind       String
+  title      String
+  lines      Json
+  ops        Json?
+  undone     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@unique([campaignId, seq])
+}
+
+model DiceRoll {
+  id          String     @id @default(cuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaignId  String?
+  campaign    Campaign?  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  characterId String?
+  character   Character? @relation(fields: [characterId], references: [id], onDelete: SetNull)
+  label       String?
+  expression  String
+  /// public | private (GM + roller) | hidden (GM only)
+  visibility  String
+  result      Json
+  createdAt   DateTime   @default(now())
+
+  @@index([campaignId, createdAt])
+  @@index([userId, createdAt])
+}
+
+model Note {
+  id         String   @id @default(cuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  /// note | npc | place | quest
+  kind       String
+  title      String
+  body       String   @default("")
+  status     String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([campaignId, kind])
+}
+
+/// Handouts the game master can reveal on the players' view.
+model CampaignDocument {
+  id         String   @id @default(cuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  title      String
+  body       String   @default("")
+  assetId    String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([campaignId])
+}
+
+/// Uploaded images (map backgrounds, handouts, portraits).
+model Asset {
+  id        String   @id @default(cuid())
+  ownerId   String
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  /// Campaign whose members may view the asset (null: owner only).
+  campaignId String?
+  mime      String
+  width     Int?
+  height    Int?
+  bytes     Bytes
+  createdAt DateTime @default(now())
+
+  @@index([ownerId])
+}

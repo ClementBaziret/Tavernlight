@@ -1,0 +1,28 @@
+{
+  "name": "tavernlight",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Tavernlight — a virtual tabletop compatible with the 5th edition rules (SRD 5.2).",
+  "packageManager": "pnpm@10.34.7",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "build:packages": "turbo run build --filter=./packages/*",
+    "dev": "turbo run dev --parallel --filter=./packages/* --filter=@tavernlight/server --filter=@tavernlight/web",
+    "typecheck": "turbo run typecheck",
+    "db:up": "docker compose up -d db",
+    "db:migrate": "pnpm --filter @tavernlight/server prisma:migrate",
+    "srd:import": "pnpm --filter @tavernlight/server srd:import",
+    "srd:fetch": "pnpm --filter @tavernlight/server srd:fetch",
+    "seed:demo": "pnpm --filter @tavernlight/server seed:demo",
+    "setup": "pnpm install && pnpm env:init && pnpm build:packages && pnpm db:up && pnpm --filter @tavernlight/server exec prisma migrate deploy && pnpm srd:import && pnpm seed:demo",
+    "mobile": "pnpm --filter @tavernlight/mobile start",
+    "env:init": "node -e \"const fs=require('fs');if(!fs.existsSync('.env'))fs.copyFileSync('.env.example','.env');fs.copyFileSync('.env','apps/server/.env')\""
+  },
+  "devDependencies": {
+    "turbo": "^2.11.9",
+    "typescript": "~5.9.3"
+  }
+}

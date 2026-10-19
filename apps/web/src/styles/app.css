@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+/*
+ * Tavernlight design tokens. Contrasts are checked for WCAG 2.2 AA:
+ * body text >= 7:1, muted text >= 4.5:1, borders of controls >= 3:1.
+ */
+:root {
+  --tl-bg: #f7f2e7;
+  --tl-surface: #ffffff;
+  --tl-surface-2: #efe7d6;
+  --tl-text: #1d1b16;
+  --tl-muted: #5b5446;
+  --tl-border: #8c8270;
+  --tl-line: #d8ccb4;
+  --tl-brand: #1b2140;
+  --tl-brand-text: #ffffff;
+  --tl-accent: #8a5a00;
+  --tl-accent-soft: #f6e3b4;
+  --tl-lantern: #e9b949;
+  --tl-danger: #b3261e;
+  --tl-danger-soft: #fbe3e1;
+  --tl-success: #1a6b2f;
+  --tl-success-soft: #dcf1e1;
+  --tl-info: #1d5fbf;
+  --tl-info-soft: #dde9fb;
+  --tl-focus: #1d5fbf;
+  color-scheme: light;
+}
+
+:root.dark,
+.dark {
+  --tl-bg: #11131f;
+  --tl-surface: #1a1d2e;
+  --tl-surface-2: #242840;
+  --tl-text: #f0ebe0;
+  --tl-muted: #bdb5a4;
+  --tl-border: #8d8778;
+  --tl-line: #353a55;
+  --tl-brand: #0b0d17;
+  --tl-brand-text: #f0ebe0;
+  --tl-accent: #f0c55d;
+  --tl-accent-soft: #3a3220;
+  --tl-lantern: #f0c55d;
+  --tl-danger: #ff8a80;
+  --tl-danger-soft: #3d1d1b;
+  --tl-success: #7fdc96;
+  --tl-success-soft: #173323;
+  --tl-info: #8cc2ff;
+  --tl-info-soft: #1b2c47;
+  --tl-focus: #f0c55d;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--tl-bg);
+  --color-surface: var(--tl-surface);
+  --color-surface-2: var(--tl-surface-2);
+  --color-text: var(--tl-text);
+  --color-muted: var(--tl-muted);
+  --color-border: var(--tl-border);
+  --color-line: var(--tl-line);
+  --color-brand: var(--tl-brand);
+  --color-brand-text: var(--tl-brand-text);
+  --color-accent: var(--tl-accent);
+  --color-accent-soft: var(--tl-accent-soft);
+  --color-lantern: var(--tl-lantern);
+  --color-danger: var(--tl-danger);
+  --color-danger-soft: var(--tl-danger-soft);
+  --color-success: var(--tl-success);
+  --color-success-soft: var(--tl-success-soft);
+  --color-info: var(--tl-info);
+  --color-info-soft: var(--tl-info-soft);
+  --font-display: "Georgia", "Iowan Old Style", "Palatino Linotype", serif;
+  --font-sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  background: var(--tl-bg);
+  color: var(--tl-text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: 1.2;
+}
+
+/* Focus moved to <main> on navigation is not a keyboard focus target. */
+main[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* A visible focus everywhere (keyboard users). */
+:focus-visible,
+[data-focus-visible] {
+  outline: 3px solid var(--tl-focus);
+  outline-offset: 2px;
+}
+
+.sr-only-focusable:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Animations can be disabled by the OS or in Tavernlight's settings. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+:root.reduce-motion *,
+:root.reduce-motion *::before,
+:root.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}
+
+@keyframes tl-roll {
+  0% {
+    transform: rotate(0deg) scale(0.8);
+    opacity: 0.4;
+  }
+  60% {
+    transform: rotate(320deg) scale(1.08);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 1;
+  }
+}
+.animate-roll {
+  animation: tl-roll 0.5s ease-out;
+}
+
+/* Larger text setting. */
+:root.text-large {
+  font-size: 118.75%;
+}
+
+.prose-text p + p {
+  margin-top: 0.5rem;
+}
